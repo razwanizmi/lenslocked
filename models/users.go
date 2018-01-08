@@ -55,8 +55,14 @@ func (us *UserService) Close() error {
 	return us.db.Close()
 }
 
+// Create will create the provided user and backfill data
+// like the ID, CreatedAt, UpdatedAt fields.
+func (us *UserService) Create(user *User) error {
+	return us.db.Create(user).Error
+}
+
 // DestructiveReset drops the users table and rebuilds it
-func (us UserService) DestructiveReset() {
+func (us *UserService) DestructiveReset() {
 	us.db.DropTableIfExists(&User{})
 	us.db.AutoMigrate(&User{})
 }
