@@ -60,6 +60,7 @@ func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	signIn(w, &user)
 	fmt.Fprintln(w, user)
 }
 
@@ -90,12 +91,15 @@ func (u *Users) Login(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	signIn(w, user)
+}
+
+func signIn(w http.ResponseWriter, user *models.User) {
 	cookie := http.Cookie{
 		Name:  "email",
 		Value: user.Email,
 	}
 	http.SetCookie(w, &cookie)
-	fmt.Fprintln(w, user)
 }
 
 // Cookie test is used to display cookie set on the current user
