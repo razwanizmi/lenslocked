@@ -61,7 +61,7 @@ func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	signIn(w, &user)
-	fmt.Fprintln(w, user)
+	http.Redirect(w, r, "/cookietest", http.StatusFound)
 }
 
 type LoginForm struct {
@@ -92,8 +92,10 @@ func (u *Users) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	signIn(w, user)
+	http.Redirect(w, r, "/cookietest", http.StatusFound)
 }
 
+// signIn is used to sign the given user in via cookie.
 func signIn(w http.ResponseWriter, user *models.User) {
 	cookie := http.Cookie{
 		Name:  "email",
@@ -102,7 +104,7 @@ func signIn(w http.ResponseWriter, user *models.User) {
 	http.SetCookie(w, &cookie)
 }
 
-// Cookie test is used to display cookie set on the current user
+// CookieTest is used to display cookie set on the current user.
 func (u *Users) CookieTest(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("email")
 	if err != nil {
