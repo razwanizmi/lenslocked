@@ -165,7 +165,7 @@ func (us *UserService) Create(user *User) error {
 // in the provided user object.
 func (us *UserService) Update(user *User) error {
 	if user.Remember != "" {
-		user.RememberHash = us.hmac.Hash(u.Remember)
+		user.RememberHash = us.hmac.Hash(user.Remember)
 	}
 	return us.db.Save(user).Error
 }
